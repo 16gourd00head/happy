@@ -1,5 +1,20 @@
 import discord
 import os
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import threading
+
+class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b'Hello, world')
+
+def run_http_server():
+    server = HTTPServer(('0.0.0.0', 3001), SimpleHTTPRequestHandler)
+    server.serve_forever()
+
+threading.Thread(target=run_http_server, daemon=True).start()
+
 
 bot = discord.Bot(intents=discord.Intents.all())
 
